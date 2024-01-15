@@ -1,3 +1,5 @@
+// custom Socket.IO adapter using Redis for horizontal scaling and sharing real-time events among multiple server instances or processes.
+
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { ServerOptions } from 'socket.io';
 import { createAdapter } from '@socket.io/redis-adapter';
