@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { RedisIoAdapter } from './redis.adapter';
+import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,6 +24,8 @@ async function bootstrap() {
   // ? Socket.IO communication in the application will now use the Redis-backed adapter
   app.useWebSocketAdapter(redisIoAdapter);
 
-  await app.listen(3004);
+  await app
+    .listen(3004)
+    .then(() => Logger.log('Socket server successfully started'));
 }
 bootstrap();
