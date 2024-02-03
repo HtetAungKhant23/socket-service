@@ -1,6 +1,14 @@
 import { ConnectedSocket, SubscribeMessage } from '@nestjs/websockets';
 import { Socket } from 'socket.io';
-import { PreConfigGateway } from 'src/config/socket.gateway';
+import { createWebSocketClass } from 'src/config/socket.gateway';
+
+const PreConfigGateway = createWebSocketClass({
+  transports: ['websocket'],
+  cors: {
+    origin: '*',
+  },
+  namespace: 'test',
+});
 
 export class testGateway extends PreConfigGateway {
   @SubscribeMessage('test')
