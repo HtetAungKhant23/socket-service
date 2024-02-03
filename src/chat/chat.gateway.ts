@@ -30,11 +30,13 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
   // ? provided from onGatewayConnection and will be called when a client connects to the WebSocket server
   handleConnection(client: Socket) {
     this.logger.log(`listen connected ${client.id}`);
+    console.log(`listen connected ${client.id}`);
   }
 
   // ? provided from onGatewayConnection and will be called when a client disconnects from the WebSocket server
   handleDisconnect(client: Socket) {
     this.logger.log(`listen disconnected ${client.id}`);
+    console.log(`listen disconnected ${client.id}`);
   }
 
   // ? allows the class to interact with the underlying Socket.IO server.
@@ -46,6 +48,7 @@ export class ChatGateway implements OnGatewayInit, OnGatewayConnection {
     @ConnectedSocket() client: Socket,
     @MessageBody() createChatDto: { gg: string },
   ) {
+    // console.log(client);
     this.server.emit('res', { la: 'khwan' });
     return this.chatService.create(createChatDto.gg);
   }
