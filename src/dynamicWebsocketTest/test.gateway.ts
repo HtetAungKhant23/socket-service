@@ -30,18 +30,23 @@ export class testGateway extends PreConfigGateway {
             type: SchemaFieldTypes.TEXT,
             SORTABLE: true,
           },
-          ['$.productIds']: {
-            AS: 'productIds',
+          ['$.cartItems']: {
+            AS: 'cartItems',
             type: SchemaFieldTypes.TEXT,
             SORTABLE: true,
           },
-          ['$.prices']: {
-            AS: 'prices',
+          '$.cartItems.productIds': {
+            AS: 'cartItems.productIds',
+            type: SchemaFieldTypes.TEXT,
+            SORTABLE: true,
+          },
+          '$.cartItems.unitPrices': {
+            AS: 'cartItems.unitPrices',
             type: SchemaFieldTypes.NUMERIC,
             SORTABLE: true,
           },
-          ['$.quantities']: {
-            AS: 'quantities',
+          '$.cartItems.quantities': {
+            AS: 'cartItems.quantities',
             type: SchemaFieldTypes.NUMERIC,
             SORTABLE: true,
           },
