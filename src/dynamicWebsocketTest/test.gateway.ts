@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { ConnectedSocket, SubscribeMessage } from '@nestjs/websockets';
-import { RedisClientType } from 'redis';
+import { RedisClientType, SchemaFieldTypes } from 'redis';
 import { Socket } from 'socket.io';
 import { createWebSocketClass } from 'src/config/socket.gateway';
 
@@ -16,6 +16,51 @@ const PreConfigGateway = createWebSocketClass({
 export class testGateway extends PreConfigGateway {
   constructor(@Inject('REDIS_CLIENT') private readonly redis: RedisClientType) {
     super();
+  }
+
+  @SubscribeMessage('createIndex')
+  async createIdx(@ConnectedSocket() client: Socket) {
+    // cart
+    try {
+      const res = await this.redis.ft.create(
+        'idx:cart',
+        {
+          '$.userId': {
+            AS: 'userId',
+            type: SchemaFieldTypes.TEXT,
+            SORTABLE: true,
+          },
+          ['$.productIds']: {
+            AS: 'productIds',
+            type: SchemaFieldTypes.TEXT,
+            SORTABLE: true,
+          },
+          ['$.prices']: {
+            AS: 'prices',
+            type: SchemaFieldTypes.NUMERIC,
+            SORTABLE: true,
+          },
+          ['$.quantities']: {
+            AS: 'quantities',
+            type: SchemaFieldTypes.NUMERIC,
+            SORTABLE: true,
+          },
+        },
+        {
+          ON: 'JSON',
+          PREFIX: 'cart',
+        },
+      );
+      this.server.to(`${client.id}`).emit('gg', res);
+    } catch (err) {
+      if (err.message === 'Index already exists') {
+        console.log('Index exists already, skipped creation.');
+      } else {
+        // Something went wrong, perhaps RediSearch isn't installed...
+        console.error(err);
+        process.exit(1);
+      }
+    }
   }
 
   @SubscribeMessage('test')

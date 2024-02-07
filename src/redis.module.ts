@@ -13,8 +13,6 @@ import { createClient } from 'redis';
       inject: ['REDIS_CUSTOM_PROVIDER'],
       provide: 'REDIS_CLIENT',
       useFactory: async (option: { url: string; ttl: 2000 }) => {
-        console.log(option.url);
-
         const client = createClient(option);
         await client.connect();
         return client;
